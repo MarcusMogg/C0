@@ -20,12 +20,6 @@ namespace C0
 
         private static void Run(Options option)
         {
-            Console.WriteLine(option.Assembly);
-            Console.WriteLine(option.Binary);
-            Console.WriteLine(option.InputFile);
-            //using (StreamWriter w = new StreamWriter(option.OutFile))
-            //using (FileStream stream = new FileStream(option.OutFile, FileMode.Create))
-
             try
             {
                 Tokenizer.Tokenizer t = new Tokenizer.Tokenizer(option.InputFile);

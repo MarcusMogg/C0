@@ -2,12 +2,14 @@
 
 ## 编译项目
 
+linux下
+
 ```
-dotnet build
+dotnet publish -r linux-x64 -c Release --self-contained -o publish
 ``
 
 ## 运行项目
 
 ```
-dotnet publish/cc0.dll [-s|-c] inputfile [-o outputfile]
+./publish/cc0 [-s|-c] inputfile [-o outputfile]
 ```
