@@ -1,14 +1,13 @@
-﻿# token
+﻿实现基础c0部分
 
-identifier : 字母开头+数字
+## 编译项目
 
-十进制数 ： 不能以0开头
+```
+dotnet build
+``
 
-十六进制 : (0x|0X) 数字 大小写都行
+## 运行项目
 
-运算符 ： + - * / < > <= >= = == !=
-
-括号 ( ) { }
-
-分号 ;
-
+```
+dotnet publish/cc0.dll [-s|-c] inputfile [-o outputfile]
+```
