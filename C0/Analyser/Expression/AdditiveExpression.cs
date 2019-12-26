@@ -10,6 +10,7 @@ namespace C0.Analyser.Expression
     {
         public List<MultiplicativeExpression> MultiplicativeExpression { get; set; }
         public List<OP> Ops { get; set; }
+        public TokenType Type { get; set; }
 
         public AdditiveExpression()
         {
@@ -21,6 +22,7 @@ namespace C0.Analyser.Expression
         {
             var res = new AdditiveExpression();
             res.MultiplicativeExpression.Add(Analyser.Expression.MultiplicativeExpression.Analyse(par));
+            res.Type = res.MultiplicativeExpression[0].Type;
             TokenProvider tokenProvider = TokenProvider.GetInstance();
             while (true)
             {
@@ -30,6 +32,7 @@ namespace C0.Analyser.Expression
                     res.Ops.Add(new OP(t.Type));
                     tokenProvider.Next();
                     res.MultiplicativeExpression.Add(Analyser.Expression.MultiplicativeExpression.Analyse(par));
+                    res.Type = TokenType.Int;
                 }
                 else
                 {

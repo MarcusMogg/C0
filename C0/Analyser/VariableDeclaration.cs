@@ -64,7 +64,7 @@ namespace C0.Analyser
                 {
                     throw MyC0Exception.MissSemicolonErr(t.BeginPos);
                 }
-                res.InitDeclarators.Add(InitDeclarator.Analyse(par, res.ConstQualifier));
+                res.InitDeclarators.Add(InitDeclarator.Analyse(par, res.ConstQualifier, res.TypeSpecifier.TokenType));
             }
 
             if (res.InitDeclarators.Count == 0)
@@ -79,7 +79,7 @@ namespace C0.Analyser
             List<IInstruction> res = new List<IInstruction>();
             foreach (var i in InitDeclarators)
             {
-                res.AddRange(i.GetIns(par, ConstQualifier,offset + res.Count));
+                res.AddRange(i.GetIns(par, ConstQualifier, offset + res.Count));
             }
             return res;
         }

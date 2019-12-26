@@ -28,7 +28,7 @@ namespace C0.Analyser.Expression
                 throw MyC0Exception.CantConstErr(t.BeginPos);
             }
 
-            
+
             tokenProvider.Next();
             if (symbolTable.IsUninitializedVariable(par, res.Identifier))
             {
@@ -45,10 +45,15 @@ namespace C0.Analyser.Expression
         }
         public List<IInstruction> GetIns(string par, int offset)
         {
+            var syt = SymbolTable.SymbolTable.GetInstance();
             List<IInstruction> res = new List<IInstruction>();
             Tuple<int, int> pos = SymbolTable.SymbolTable.GetInstance().GetLevelOffset(Identifier, par);
             res.Add(new LoadA((ushort)(SymbolTable.SymbolTable.GetInstance().GetFuncLevel(par) - pos.Item1), pos.Item2));
             res.AddRange(Expression.GetIns(par, offset + res.Count));
+            if (syt.GetIdType(par, Identifier) == TokenType.Char)
+            {
+                res.Add(new I2C());
+            }
             res.Add(new Istore());
             return res;
         }

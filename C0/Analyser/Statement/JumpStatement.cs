@@ -48,9 +48,14 @@ namespace C0.Analyser.Statement
         public List<IInstruction> GetIns(string par, int offset)
         {
             var res = new List<IInstruction>();
+            var syt = SymbolTable.SymbolTable.GetInstance();
             if (Expression != null)
             {
-                res.AddRange(Expression.GetIns(par,offset));
+                res.AddRange(Expression.GetIns(par, offset));
+                if (syt.GeFuncType(par) == TokenType.Char)
+                {
+                    res.Add(new I2C());
+                }
                 res.Add(new IRet());
             }
             else

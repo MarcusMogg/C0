@@ -12,7 +12,7 @@ namespace C0.Analyser
         public string Identifier { get; set; }
         public Expression.Expression Expression { get; set; }
 
-        public static InitDeclarator Analyse(string par, bool cst)
+        public static InitDeclarator Analyse(string par, bool cst, TokenType type)
         {
             var res = new InitDeclarator();
             TokenProvider tokenProvider = TokenProvider.GetInstance();
@@ -36,18 +36,18 @@ namespace C0.Analyser
                 {
                     throw MyC0Exception.ConstNotInitializedErr(t.BeginPos);
                 }
-                symbolTable.AddUninitializedVariable(par, res.Identifier);
+                symbolTable.AddUninitializedVariable(par, res.Identifier, type);
             }
             else if (t.Type == TokenType.OperatorAssignment)
             {
                 tokenProvider.Next();
                 if (cst)
                 {
-                    symbolTable.AddConstVariable(par, res.Identifier);
+                    symbolTable.AddConstVariable(par, res.Identifier, type);
                 }
                 else
                 {
-                    symbolTable.AddInitializedVariable(par, res.Identifier);
+                    symbolTable.AddInitializedVariable(par, res.Identifier, type);
                 }
                 res.Expression = Analyser.Expression.Expression.Analyse(par);
             }
@@ -61,6 +61,10 @@ namespace C0.Analyser
             if (Expression != null)
             {
                 res.AddRange(Expression.GetIns(par, offset));
+                if (s.GetIdType(par, Identifier) == TokenType.Char)
+                {
+                    res.Add(new I2C());
+                }
                 if (cst)
                 {
                     s.UpdateConstOffset(Identifier, par);

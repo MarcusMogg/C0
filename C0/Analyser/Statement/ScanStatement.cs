@@ -64,10 +64,18 @@ namespace C0.Analyser.Statement
         public List<IInstruction> GetIns(string par, int offset)
         {
             var res = new List<IInstruction>();
-            Tuple<int, int> pos = SymbolTable.SymbolTable.GetInstance().GetLevelOffset(Identifier, par);
+            var syt = SymbolTable.SymbolTable.GetInstance();
+            Tuple<int, int> pos = syt.GetLevelOffset(Identifier, par);
             res.Add(new LoadA((ushort)(SymbolTable.SymbolTable.GetInstance().GetFuncLevel(par) - pos.Item1), pos.Item2));
 
-            res.Add(new IScan());
+            if (syt.GetIdType(par, Identifier) == TokenType.Char)
+            {
+                res.Add(new CScan());
+            }
+            else
+            {
+                res.Add(new IScan());
+            }
             res.Add(new Istore());
 
             return res;

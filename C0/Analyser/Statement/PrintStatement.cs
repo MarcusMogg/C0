@@ -87,7 +87,14 @@ namespace C0.Analyser.Statement
                 if (Expressions[i] is Expression.Expression)
                 {
                     res.AddRange(Expressions[i].GetIns(par, offset + res.Count));
-                    res.Add(new IPrint());
+                    if (Expressions[i].Type == TokenType.Char)
+                    {
+                        res.Add(new CPrint());
+                    }
+                    else
+                    {
+                        res.Add(new IPrint());
+                    }
 
                 }
                 else if (Expressions[i] is char)

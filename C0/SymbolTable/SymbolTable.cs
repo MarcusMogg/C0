@@ -16,6 +16,8 @@ namespace C0.SymbolTable
         private readonly Dictionary<Tuple<string, string>, int> _constVars;
         private readonly Dictionary<Tuple<string, string>, int> _initializedVars;
         private readonly Dictionary<Tuple<string, string>, int> _uninitializedVars;
+        private readonly Dictionary<Tuple<string, string>, TokenType> _varType;
+
         private readonly Dictionary<string, List<Tuple<TokenType, string>>> _functions;
         private readonly Dictionary<string, int> _functionsIndex;
 
@@ -30,6 +32,7 @@ namespace C0.SymbolTable
             _offset = new Dictionary<string, int>();
             _level = new Dictionary<string, int>();
             _functionsIndex = new Dictionary<string, int>();
+            _varType = new Dictionary<Tuple<string, string>, TokenType>();
         }
 
         public static SymbolTable GetInstance()
@@ -93,19 +96,22 @@ namespace C0.SymbolTable
             return _funcs.ContainsKey(id);
         }
 
-        public void AddUninitializedVariable(string s, string id)
+        public void AddUninitializedVariable(string s, string id, TokenType type)
         {
             _uninitializedVars[new Tuple<string, string>(s, id)] = 0;
+            _varType[new Tuple<string, string>(s, id)] = type;
         }
 
-        public void AddInitializedVariable(string s, string id)
+        public void AddInitializedVariable(string s, string id, TokenType type)
         {
             _initializedVars[new Tuple<string, string>(s, id)] = 0;
+            _varType[new Tuple<string, string>(s, id)] = type;
         }
 
-        public void AddConstVariable(string s, string id)
+        public void AddConstVariable(string s, string id, TokenType type)
         {
             _constVars[new Tuple<string, string>(s, id)] = 0;
+            _varType[new Tuple<string, string>(s, id)] = type;
         }
         public void AddFunctionParm(string id, string name, TokenType type)
         {
@@ -162,7 +168,7 @@ namespace C0.SymbolTable
 
         public void InitializeVar(string id, string par)
         {
-            var key = new Tuple<string, string>(FindNearestPar(id,par), id);
+            var key = new Tuple<string, string>(FindNearestPar(id, par), id);
             _initializedVars[key] = _uninitializedVars[key];
             _uninitializedVars.Remove(key);
         }
@@ -241,6 +247,12 @@ namespace C0.SymbolTable
         public int GetFuncLevel(string name)
         {
             return _level[name];
+        }
+
+        public TokenType GetIdType(string par, string id)
+        {
+            var key = new Tuple<string, string>(FindNearestPar(id, par), id);
+            return _varType[key];
         }
     }
 

@@ -466,7 +466,32 @@ namespace C0.Instruction
         }
 
     }
+    public class CScan : IInstruction
+    {
+        public string ToHexString()
+        {
+            return $"b2";
+        }
 
+        public string ToNorString()
+        {
+            return $"cscan";
+        }
+
+    }
+    public class I2C : IInstruction
+    {
+        public string ToHexString()
+        {
+            return $"62";
+        }
+
+        public string ToNorString()
+        {
+            return $"i2c";
+        }
+
+    }
     public class ConstantInfoString : IInstruction
     {
         public string Param1 { get; set; }

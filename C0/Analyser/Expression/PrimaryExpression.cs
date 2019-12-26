@@ -10,6 +10,7 @@ namespace C0.Analyser.Expression
     public class PrimaryExpression
     {
         public dynamic Content { get; set; }
+        public TokenType Type { get; set; }
 
         public static PrimaryExpression Analyse(string par)
         {
@@ -21,6 +22,7 @@ namespace C0.Analyser.Expression
             {
                 tokenProvider.Next();
                 res.Content = Expression.Analyse(par);
+                res.Type = res.Content.Type;
                 t = tokenProvider.PeekNextToken();
                 if (t.Type != TokenType.BracketsRightRound)
                 {
@@ -31,6 +33,7 @@ namespace C0.Analyser.Expression
             else if (t.Type == TokenType.LiteralDecimal || t.Type == TokenType.LiteralHexadecimal)
             {
                 res.Content = t.Content;
+                res.Type = TokenType.Int;
                 tokenProvider.Next();
             }
             else if (t.Type == TokenType.Identifier)
@@ -42,6 +45,7 @@ namespace C0.Analyser.Expression
                         throw MyC0Exception.NotInitializedErr(t.BeginPos);
                     }
                     res.Content = t.Content;
+                    res.Type = symbolTable.GetIdType(par, t.Content);
                     tokenProvider.Next();
                 }
                 else if (symbolTable.IsFunciton(t.Content))
@@ -57,11 +61,18 @@ namespace C0.Analyser.Expression
                     }
 
                     res.Content = tmp;
+                    res.Type = symbolTable.GeFuncType(tmp.Identifier);
                 }
                 else
                 {
                     throw MyC0Exception.NotExistErr(t.BeginPos);
                 }
+            }
+            else if(t.Type == TokenType.Char)
+            {
+                res.Content = t.Content;
+                res.Type = TokenType.Char;
+                tokenProvider.Next();
             }
             else
             {
@@ -82,6 +93,10 @@ namespace C0.Analyser.Expression
                 Tuple<int,int> pos = SymbolTable.SymbolTable.GetInstance().GetLevelOffset(Content, par);
                 res.Add(new LoadA((ushort)(SymbolTable.SymbolTable.GetInstance().GetFuncLevel(par) - pos.Item1), pos.Item2));
                 res.Add(new ILoad());
+            }
+            else if (Content is char)
+            {
+                res.Add(new IPush(Content));
             }
             else
             {

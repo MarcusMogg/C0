@@ -44,7 +44,7 @@ namespace C0.Analyser
 
             res.Identifier = t.Content;
             SymbolTable.SymbolTable syt = SymbolTable.SymbolTable.GetInstance();
-            syt.AddInitializedVariable(par,res.Identifier);
+            syt.AddInitializedVariable(par, res.Identifier, res.TypeSpecifier.TokenType);
             return res;
         }
     }

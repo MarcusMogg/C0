@@ -16,7 +16,7 @@ namespace C0.Analyser
 
         public static bool IsTypeSpecifier(TokenType t)
         {
-            return t == TokenType.Int || t == TokenType.Void;
+            return t == TokenType.Int || t == TokenType.Void || t == TokenType.Char;
         }
     }
 }

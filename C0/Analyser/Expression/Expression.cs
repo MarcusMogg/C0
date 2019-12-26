@@ -13,6 +13,7 @@ namespace C0.Analyser.Expression
         {
             var res = new Expression();
             res.AdditiveExpression = AdditiveExpression.Analyse(par);
+            res.Type = res.AdditiveExpression.Type;
             return res;
         }
         public List<IInstruction> GetIns(string par, int offset)
