@@ -113,16 +113,13 @@ namespace C0.Analyser.Statement
                         res.Add(new CPrint());
                     }
                 }
-                if (i == l - 1)
-                {
-                    res.Add(new PrintL());
-                }
-                else
+                if (i != l - 1)
                 {
                     res.Add(new BiPush(32));
                     res.Add(new CPrint());
                 }
             }
+            res.Add(new PrintL());
             return res;
         }
     }
