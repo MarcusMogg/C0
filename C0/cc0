@@ -1,2 +1,2 @@
-﻿./publish/cc0 "$@"
+./publish/cc0 "$@"
 echo "$@"
