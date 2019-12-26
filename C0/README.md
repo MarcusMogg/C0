@@ -5,11 +5,11 @@
 linux下
 
 ```
-dotnet publish -r linux-x64 -c Release --self-contained -o publish
-``
+dotnet publish -r linux-x64 -c Release --self-contained -o cc0 /p:PublishSingleFile=true
+```
 
 ## 运行项目
 
 ```
-./publish/cc0 [-s|-c] inputfile [-o outputfile]
+./cc0 [-s|-c] inputfile [-o outputfile]
 ```
