@@ -123,16 +123,17 @@ namespace C0.Analyser
         {
             var res = new List<IInstruction>();
             SymbolTable.SymbolTable syt = SymbolTable.SymbolTable.GetInstance();
-            
+
             foreach (var i in ParameterDeclarations)
             {
-                syt.UpdateInitializedOffset(i.Identifier,Identifier);
+                syt.UpdateInitializedOffset(i.Identifier, Identifier);
             }
             foreach (var i in VariableDeclarations)
             {
                 res.AddRange(i.GetIns(Identifier, offset + res.Count));
             }
-            res.AddRange(StatementSeqs.GetIns(Identifier, offset + res.Count));
+            if (StatementSeqs != null)
+                res.AddRange(StatementSeqs.GetIns(Identifier, offset + res.Count));
             res.Add(new BiPush(0));
             res.Add(new IRet());
             return res;
