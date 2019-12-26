@@ -5,11 +5,13 @@
 linux下
 
 ```
-dotnet publish -r linux-x64 -c Release --self-contained -o cc0 /p:PublishSingleFile=true
+chmod +x build.sh
+./build.sh
 ```
 
 ## 运行项目
 
 ```
-./cc0 [-s|-c] inputfile [-o outputfile]
+chmod +x cc0
+./cc0
 ```
