@@ -83,5 +83,9 @@ namespace C0.Utils
         {
             return new MyC0Exception("缺少main函数", new Pos(-1,0));
         }
+        public static MyC0Exception MissRightComment(Pos p)
+        {
+            return new MyC0Exception("注释不匹配", p);
+        }
     }
 }

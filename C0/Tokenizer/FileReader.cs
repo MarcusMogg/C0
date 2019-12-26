@@ -25,18 +25,22 @@ namespace C0.Tokenizer
             {
                 while (!s.EndOfStream)
                 {
-                    _content.Add(s.ReadLine()+"\n");
+                    _content.Add(s.ReadLine() + "\n");
                     _lines++;
                 }
             }
-
-            _content[0] = " " + _content[0];
+            if (_content.Count > 0)
+                _content[0] = " " + _content[0];
         }
 
         public Pos NextPos()
         {
             try
             {
+                if (CurPos.X >= _lines)
+                {
+                    return CurPos;
+                }
                 if (CurPos.Y >= _content[CurPos.X].Length - 1)
                 {
                     return new Pos(CurPos.X + 1, 0);

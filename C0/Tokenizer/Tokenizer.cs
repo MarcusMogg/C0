@@ -36,7 +36,7 @@ namespace C0.Tokenizer
                 cc = _fileReader.PeekNextChar();
                 if (cc != null)
                 {
-                    if (!TokenUtils.AcChar(cc.Value))
+                    if (cd != DfaState.SingleLineComment && cd != DfaState.MultiLineCommentLeft && !TokenUtils.AcChar(cc.Value))
                     {
                         throw MyC0Exception.InvalidInputErr(_fileReader.CurPos);
                     }
@@ -44,7 +44,7 @@ namespace C0.Tokenizer
                 switch (cd)
                 {
                     case DfaState.Initial:
-                        if (cc == null) 
+                        if (cc == null)
                         {
                             return new Token(TokenType.Eof, "", cp);
                         }
@@ -175,6 +175,21 @@ namespace C0.Tokenizer
                     case DfaState.OperatorMultiply:
                         return new Token(TokenType.OperatorMultiply, s, cp);
                     case DfaState.OperatorDivision:
+                        if (cc != null)
+                        {
+                            if (cc == '/')
+                            {
+                                s = "";
+                                cd = DfaState.SingleLineComment;
+                                break;
+                            }
+                            if (cc == '*')
+                            {
+                                s = "";
+                                cd = DfaState.MultiLineCommentLeft;
+                                break;
+                            }
+                        }
                         return new Token(TokenType.OperatorDivision, s, cp);
                     case DfaState.OperatorLess:
                         if (cc != null)
@@ -228,6 +243,30 @@ namespace C0.Tokenizer
                         }
                         _fileReader.ReadNext();
                         return new Token(TokenType.OperatorNotEqual, s, cp);
+                    case DfaState.SingleLineComment:
+                        if (cc == null || cc == '\n')
+                        {
+                            cd = DfaState.Initial;
+                        }
+                        break;
+                    case DfaState.MultiLineCommentLeft:
+                        if (cc == null)
+                        {
+                            throw MyC0Exception.MissRightComment(cp);
+                        }
+                        if (cc == '*')
+                        {
+                            cd = DfaState.MultiLineCommentRight;
+                        }
+                        break;
+                    case DfaState.MultiLineCommentRight:
+                        if (cc == null)
+                        {
+                            throw MyC0Exception.MissRightComment(cp);
+                        }
+
+                        cd = cc == '/' ? DfaState.Initial : DfaState.MultiLineCommentLeft;
+                        break;
                     default:
                         throw MyC0Exception.InvalidTokenErr(cp);
                 }

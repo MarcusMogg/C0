@@ -36,5 +36,10 @@ namespace C0.Tokenizer
         Semicolon,                   // ;
         // comma
         Comma,                       // ,
+
+        // comment
+        SingleLineComment,           // //
+        MultiLineCommentLeft,        // /*
+        MultiLineCommentRight,       // */
     }
 }
