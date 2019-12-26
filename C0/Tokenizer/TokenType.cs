@@ -22,7 +22,8 @@
         Break,                       
         Continue,                    
         Print,                       
-        Scan,                        
+        Scan,    
+        String,
         // identifier                
         Identifier,                  
         // literal                   

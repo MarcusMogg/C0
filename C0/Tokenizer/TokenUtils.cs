@@ -6,8 +6,14 @@ namespace C0.Tokenizer
     {
         private static readonly HashSet<char> Punctuation = new HashSet<char>
         {
-            //'_','[',']', '.', ':', '?','%','^','&','|','~','\\', '\"','\'','`', '$' ,'#' ,'@',
-            '(',')','{','}','<','=','>',',',';','!','+','-','*','/'
+            //'_','[',']', '.', ':', '?','%','^','&','|','~',' '`', '$' ,'#' ,'@',
+            '(',')','{','}','<','=','>',',',';','!','+','-','*','/','\"','\'','\\',
+
+        };
+        private static readonly HashSet<char> AllPunctuation = new HashSet<char>
+        {
+            '_','[',']', '.', ':', '?','%','^','&','|','~','`', '$' ,'#' ,'@',
+            '(',')','{','}','<','=','>',',',';','!','+','-','*','/','\"','\'','\\',
 
         };
         public static bool IsSpace(char c)
@@ -29,16 +35,29 @@ namespace C0.Tokenizer
             return IsNum(c) || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
         }
 
+        public static int GetHexNum(char c)
+        {
+            if (IsNum(c)) return c - '0';
+            if (c >= 'a' && c <= 'f') return 10 + c - 'a';
+            return 10 + c - 'A';
+        }
         public static bool IsPun(char c)
         {
             return Punctuation.Contains(c);
+        }
+        public static bool IsAllPun(char c)
+        {
+            return AllPunctuation.Contains(c);
         }
 
         public static bool AcChar(char c)
         {
             return IsNum(c) || IsLetter(c) || IsPun(c) || IsSpace(c);
         }
-
+        public static bool AllAcChar(char c)
+        {
+            return IsNum(c) || IsLetter(c) || IsAllPun(c) || IsSpace(c);
+        }
         public static readonly Dictionary<string, TokenType> KeyWords = new Dictionary<string, TokenType>
         {
             { "const"   , TokenType.Const},

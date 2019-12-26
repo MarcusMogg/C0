@@ -11,10 +11,10 @@ namespace C0.Analyser.Statement
     {
         public PrintStatement()
         {
-            Expressions = new List<Expression.Expression>();
+            Expressions = new List<dynamic>();
         }
 
-        public List<Expression.Expression> Expressions { get; set; }
+        public List<dynamic> Expressions { get; set; }
         public static PrintStatement Analyse(string par)
         {
             var res = new PrintStatement();
@@ -45,7 +45,21 @@ namespace C0.Analyser.Statement
                     tokenProvider.Next();
                     continue;
                 }
-                res.Expressions.Add(Expression.Expression.Analyse(par));
+
+                if (t.Type == TokenType.Char)
+                {
+                    res.Expressions.Add(t.Content);
+                    tokenProvider.Next();
+                }
+                else if (t.Type == TokenType.String)
+                {
+                    res.Expressions.Add(t.Content);
+                    tokenProvider.Next();
+                }
+                else
+                {
+                    res.Expressions.Add(Expression.Expression.Analyse(par));
+                }
             }
 
             t = tokenProvider.PeekNextToken();
@@ -70,8 +84,28 @@ namespace C0.Analyser.Statement
             int l = Expressions.Count;
             for (int i = 0; i < l; i++)
             {
-                res.AddRange(Expressions[i].GetIns(par, offset + res.Count));
-                res.Add(new IPrint());
+                if (Expressions[i] is Expression.Expression)
+                {
+                    res.AddRange(Expressions[i].GetIns(par, offset + res.Count));
+                    res.Add(new IPrint());
+
+                }
+                else if (Expressions[i] is char)
+                {
+                    char tmp = Expressions[i];
+                    res.Add(new BiPush((byte)tmp));
+                    res.Add(new CPrint());
+                }
+                else
+                {
+                    string tmp = (string)Expressions[i];
+                    foreach (var j in tmp)
+                    {
+                        if (j == '\0') break;
+                        res.Add(new BiPush((byte)j));
+                        res.Add(new CPrint());
+                    }
+                }
                 if (i == l - 1)
                 {
                     res.Add(new PrintL());
@@ -82,7 +116,6 @@ namespace C0.Analyser.Statement
                     res.Add(new CPrint());
                 }
             }
-
             return res;
         }
     }

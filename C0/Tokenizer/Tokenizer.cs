@@ -36,7 +36,11 @@ namespace C0.Tokenizer
                 cc = _fileReader.PeekNextChar();
                 if (cc != null)
                 {
-                    if (cd != DfaState.SingleLineComment && cd != DfaState.MultiLineCommentLeft && !TokenUtils.AcChar(cc.Value))
+                    if (cd != DfaState.SingleLineComment
+                        && cd != DfaState.MultiLineCommentLeft
+                        && cd != DfaState.Char
+                        && cd != DfaState.String
+                        && !TokenUtils.AcChar(cc.Value))
                     {
                         throw MyC0Exception.InvalidInputErr(_fileReader.CurPos);
                     }
@@ -107,6 +111,14 @@ namespace C0.Tokenizer
                                 case ',':
                                     cd = DfaState.Comma;
                                     break;
+                                case '\'':
+                                    cd = DfaState.Char;
+                                    break;
+                                case '\"':
+                                    cd = DfaState.String;
+                                    break;
+                                default:
+                                    throw MyC0Exception.InvalidInputErr(_fileReader.CurPos);
                             }
                         }
 
@@ -267,6 +279,35 @@ namespace C0.Tokenizer
 
                         cd = cc == '/' ? DfaState.Initial : DfaState.MultiLineCommentLeft;
                         break;
+                    case DfaState.Char:
+                        if (cc == null || cc == '\'')
+                        {
+                            throw MyC0Exception.InvalidTokenErr(cp);
+                        }
+                        char tmp = ReadChar();
+                        cc = _fileReader.PeekNextChar();
+                        _fileReader.ReadNext();
+                        if (cc != null && cc == '\'')
+                            return new Token(TokenType.Char, tmp, cp);
+                        throw MyC0Exception.InvalidTokenErr(cp);
+                    case DfaState.String:
+                        s = "";
+                        while (true)
+                        {
+                            cc = _fileReader.PeekNextChar();
+                            if (cc == null)
+                            {
+                                throw MyC0Exception.InvalidTokenErr(cp);
+                            }
+
+                            if (cc == '\"')
+                            {
+                                _fileReader.ReadNext();
+                                return new Token(TokenType.String, s, cp);
+                            }
+                            char tc = ReadChar();
+                            s += tc;
+                        }
                     default:
                         throw MyC0Exception.InvalidTokenErr(cp);
                 }
@@ -276,6 +317,85 @@ namespace C0.Tokenizer
 
         }
 
+        private char ReadChar()
+        {
+            Pos p = _fileReader.CurPos;
+            char res = '.';
+            char? cc = _fileReader.PeekNextChar();
+            if (cc == null || cc == '\n' || cc == '\r')
+            {
+                throw MyC0Exception.InvalidTokenErr(_fileReader.CurPos);
+            }
+
+            if (cc == '\\')
+            {
+                _fileReader.ReadNext();
+                cc = _fileReader.PeekNextChar();
+                if (cc == null)
+                {
+                    throw MyC0Exception.InvalidInputErr(p);
+                }
+
+                if (cc == '\\')
+                {
+                    res = '\\';
+                }
+                else if (cc == '\'')
+                {
+                    res = '\'';
+                }
+                else if (cc == '\"')
+                {
+                    res = '\"';
+                }
+                else if (cc == 'n')
+                {
+                    res = '\n';
+                }
+                else if (cc == 'r')
+                {
+                    res = '\r';
+                }
+                else if (cc == 't')
+                {
+                    res = '\t';
+                }
+                else if (cc == 'x')
+                {
+                    int s = 0;
+                    _fileReader.ReadNext();
+                    cc = _fileReader.PeekNextChar();
+                    if (cc == null || !TokenUtils.IsHexLetter(cc.Value))
+                    {
+                        throw MyC0Exception.InvalidInputErr(p);
+                    }
+                    s = s * 16 + TokenUtils.GetHexNum(cc.Value);
+                    _fileReader.ReadNext();
+                    cc = _fileReader.PeekNextChar();
+                    if (cc == null || !TokenUtils.IsHexLetter(cc.Value))
+                    {
+                        throw MyC0Exception.InvalidInputErr(p);
+                    }
+                    s = s * 16 + TokenUtils.GetHexNum(cc.Value);
+                    res = (char)s;
+                }
+                else
+                {
+                    throw MyC0Exception.InvalidInputErr(p);
+                }
+            }
+            else
+            {
+                if (!TokenUtils.AllAcChar(cc.Value))
+                {
+                    throw MyC0Exception.InvalidInputErr(p);
+                }
+                res = cc.Value;
+            }
+
+            _fileReader.ReadNext();
+            return res;
+        }
         private void Init()
         {
             try

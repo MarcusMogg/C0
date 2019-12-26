@@ -41,5 +41,9 @@ namespace C0.Tokenizer
         SingleLineComment,           // //
         MultiLineCommentLeft,        // /*
         MultiLineCommentRight,       // */
+
+        // char
+        Char,
+        String,
     }
 }
