@@ -20,7 +20,7 @@ namespace C0.Analyser.Statement
             tokenProvider.Next();
             if (t.Type != TokenType.Return)
             {
-                throw MyC0Exception.InvalidTokenErr(t.BeginPos);
+                throw new MyC0Exception("应该为return", t.BeginPos);
             }
 
             t = tokenProvider.PeekNextToken();
@@ -39,7 +39,7 @@ namespace C0.Analyser.Statement
             var tp = symbolTable.GeFuncType(par);
             if (res.Expression == null ^ tp == TokenType.Void)
             {
-                throw MyC0Exception.InvalidTokenErr(t.BeginPos);
+                throw new MyC0Exception("返回类型错误", t.BeginPos);
             }
 
             return res;

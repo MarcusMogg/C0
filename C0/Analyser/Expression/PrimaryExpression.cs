@@ -76,7 +76,7 @@ namespace C0.Analyser.Expression
             }
             else
             {
-                throw MyC0Exception.InvalidTokenErr(t.BeginPos);
+                throw new MyC0Exception("表达式不完整", t.BeginPos);
             }
 
             return res;

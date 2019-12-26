@@ -31,7 +31,7 @@ namespace C0.Analyser.Statement
                 tokenProvider.Next();
                 if (t.Type != TokenType.BracketsRightCurly)
                 {
-                    throw MyC0Exception.InvalidTokenErr(t.BeginPos);
+                    throw new MyC0Exception("括号不匹配", t.BeginPos);
                 }
             }
             else if (t.Type == TokenType.If)
@@ -85,7 +85,7 @@ namespace C0.Analyser.Statement
             }
             else
             {
-                throw MyC0Exception.InvalidTokenErr(t.BeginPos);
+                throw new MyC0Exception("statement语法错误", t.BeginPos);
             }
 
             return res;

@@ -38,7 +38,7 @@ namespace C0.Analyser
 
                 if (!TypeSpecifier.IsTypeSpecifier(t.Type))
                 {
-                    throw MyC0Exception.InvalidTokenErr(t.BeginPos);
+                    throw new MyC0Exception("声明类型错误", t.BeginPos);
                 }
 
                 if (t.Type == TokenType.Void)
@@ -50,7 +50,7 @@ namespace C0.Analyser
 
                 if (t.Type != TokenType.Identifier)
                 {
-                    throw MyC0Exception.InvalidTokenErr(t.BeginPos);
+                    throw new MyC0Exception("变量声明错误", t.BeginPos);
                 }
 
                 tokenProvider.Next();

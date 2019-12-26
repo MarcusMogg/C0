@@ -27,7 +27,7 @@ namespace C0.Analyser
             Token t = tokenProvider.PeekNextToken();
             if (t.Type != TokenType.Const && !Analyser.TypeSpecifier.IsTypeSpecifier(t.Type))
             {
-                throw MyC0Exception.InvalidTokenErr(t.BeginPos);
+                throw new MyC0Exception("变量声明错误", t.BeginPos);
             }
             if (t.Type == TokenType.Const)
             {
@@ -37,7 +37,7 @@ namespace C0.Analyser
             }
             if (!Analyser.TypeSpecifier.IsTypeSpecifier(t.Type))
             {
-                throw MyC0Exception.InvalidTokenErr(t.BeginPos);
+                throw new MyC0Exception("变量声明错误", t.BeginPos);
             }
             if (t.Type == TokenType.Void)
             {

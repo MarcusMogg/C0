@@ -19,7 +19,7 @@ namespace C0.Analyser.Expression
             SymbolTable.SymbolTable symbolTable = SymbolTable.SymbolTable.GetInstance();
             if (!symbolTable.IsDeclaredAllDomain(par, t.Content))
             {
-                throw MyC0Exception.InvalidTokenErr(t.BeginPos);
+                throw MyC0Exception.NotExistErr(t.BeginPos);
             }
             res.Identifier = t.Content;
 
@@ -37,7 +37,7 @@ namespace C0.Analyser.Expression
             t = tokenProvider.PeekNextToken();
             if (t.Type != TokenType.OperatorAssignment)
             {
-                throw MyC0Exception.InvalidTokenErr(t.BeginPos);
+                throw  new MyC0Exception("应该为=",t.BeginPos);
             }
             tokenProvider.Next();
             res.Expression = Expression.Analyse(par);

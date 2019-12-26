@@ -21,14 +21,14 @@ namespace C0.Analyser.Statement
             Token t = tokenProvider.PeekNextToken();
             if (t.Type != TokenType.If)
             {
-                throw MyC0Exception.InvalidTokenErr(t.BeginPos);
+                throw new MyC0Exception("应该为if", t.BeginPos);
             }
 
             tokenProvider.Next();
             t = tokenProvider.PeekNextToken();
             if (t.Type != TokenType.BracketsLeftRound)
             {
-                throw MyC0Exception.InvalidTokenErr(t.BeginPos);
+                throw new MyC0Exception("缺少括号", t.BeginPos);
             }
 
             tokenProvider.Next();
@@ -36,7 +36,7 @@ namespace C0.Analyser.Statement
             t = tokenProvider.PeekNextToken();
             if (t.Type != TokenType.BracketsRightRound)
             {
-                throw MyC0Exception.InvalidTokenErr(t.BeginPos);
+                throw new MyC0Exception("括号不匹配", t.BeginPos);
             }
 
             tokenProvider.Next();

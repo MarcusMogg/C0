@@ -26,7 +26,7 @@ namespace C0.Analyser
 
             if (!Analyser.TypeSpecifier.IsTypeSpecifier(t.Type))
             {
-                throw MyC0Exception.InvalidTokenErr(t.BeginPos);
+                throw new MyC0Exception("应该为类型", t.BeginPos);
             }
 
             if (t.Type == TokenType.Void)
@@ -39,7 +39,7 @@ namespace C0.Analyser
             tokenProvider.Next();
             if (t.Type != TokenType.Identifier)
             {
-                throw MyC0Exception.InvalidTokenErr(t.BeginPos);
+                throw new MyC0Exception("应该为变量名", t.BeginPos);
             }
 
             res.Identifier = t.Content;

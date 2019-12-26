@@ -10,7 +10,7 @@ namespace C0.Utils
     {
         public Pos ErrPos { get; set; }
 
-        MyC0Exception(string message, Pos p) : base(message)
+        public MyC0Exception(string message, Pos p) : base(message)
         {
             ErrPos = p;
         }

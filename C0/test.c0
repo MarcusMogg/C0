@@ -1,8 +1,0 @@
-int main()
-{
-    char i = 'c';
-    print(c);
-    i = i+1;
-    print(c);
-    print(c+1,(char)c+1,(int)c+1);
-}

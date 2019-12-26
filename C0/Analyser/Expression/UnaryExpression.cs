@@ -39,7 +39,7 @@ namespace C0.Analyser.Expression
 
                 if (t.Type == TokenType.Void)
                 {
-                    throw MyC0Exception.InvalidTokenErr(t.BeginPos);
+                    throw new MyC0Exception("类型不能为void", t.BeginPos);
                 }
                 res.TypeSpecifiers.Add(new TypeSpecifier(t.Type));
                 tokenProvider.Next();
@@ -47,7 +47,7 @@ namespace C0.Analyser.Expression
 
                 if (t.Type != TokenType.BracketsRightRound)
                 {
-                    throw MyC0Exception.InvalidTokenErr(t.BeginPos);
+                    throw new MyC0Exception("括号不匹配", t.BeginPos);
                 }
                 tokenProvider.Next();
                 t = tokenProvider.PeekNextToken();

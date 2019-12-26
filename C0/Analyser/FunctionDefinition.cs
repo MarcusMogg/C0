@@ -31,14 +31,15 @@ namespace C0.Analyser
             tokenProvider.Next();
             if (!Analyser.TypeSpecifier.IsTypeSpecifier(t.Type))
             {
-                throw MyC0Exception.InvalidTokenErr(t.BeginPos);
+                throw new MyC0Exception("类型声明错误", t.BeginPos);
+                
             }
             res.TypeSpecifier = new TypeSpecifier(t.Type);
 
             t = tokenProvider.PeekNextToken();
             if (t.Type != TokenType.Identifier)
             {
-                throw MyC0Exception.InvalidTokenErr(t.BeginPos);
+                throw new MyC0Exception("函数声明错误", t.BeginPos);
             }
 
             res.Identifier = t.Content;
@@ -56,7 +57,7 @@ namespace C0.Analyser
             tokenProvider.Next();
             if (t.Type != TokenType.BracketsLeftRound)
             {
-                throw MyC0Exception.InvalidTokenErr(t.BeginPos);
+                throw new MyC0Exception("应该为(", t.BeginPos);
             }
             while (true)
             {
@@ -74,7 +75,7 @@ namespace C0.Analyser
             }
             if (t.Type != TokenType.BracketsRightRound)
             {
-                throw MyC0Exception.InvalidTokenErr(t.BeginPos);
+                throw new MyC0Exception("应该为)", t.BeginPos);
             }
             tokenProvider.Next();
             foreach (var i in res.ParameterDeclarations)
@@ -113,7 +114,7 @@ namespace C0.Analyser
             }
             if (t.Type != TokenType.BracketsRightCurly)
             {
-                throw MyC0Exception.InvalidTokenErr(t.BeginPos);
+                throw new MyC0Exception("应该为}", t.BeginPos);
             }
             tokenProvider.Next();
             return res;

@@ -23,7 +23,7 @@ namespace C0.Analyser
             Token t = tokenProvider.PeekNextToken();
             if (t.Type != TokenType.Identifier)
             {
-                throw MyC0Exception.InvalidTokenErr(t.BeginPos);
+                throw new MyC0Exception("应该为functionname", t.BeginPos);
             }
 
             if (!symbolTable.IsFunciton(t.Content))
@@ -37,7 +37,7 @@ namespace C0.Analyser
             tokenProvider.Next();
             if (t.Type != TokenType.BracketsLeftRound)
             {
-                throw MyC0Exception.InvalidTokenErr(t.BeginPos);
+                throw new MyC0Exception("缺少括号", t.BeginPos);
             }
             while (true)
             {
@@ -55,13 +55,13 @@ namespace C0.Analyser
             }
             if (t.Type != TokenType.BracketsRightRound)
             {
-                throw MyC0Exception.InvalidTokenErr(t.BeginPos);
+                throw new MyC0Exception("括号不匹配", t.BeginPos);
             }
             tokenProvider.Next();
             var parment = symbolTable.GetParams(res.Identifier);
             if (parment.Count != res.Expressions.Count)
             {
-                throw MyC0Exception.InvalidTokenErr(t.BeginPos);
+                throw new MyC0Exception("参数数量不匹配", t.BeginPos);
             }
             return res;
         }

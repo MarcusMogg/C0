@@ -19,19 +19,19 @@ namespace C0.Analyser.Statement
             var syt = SymbolTable.SymbolTable.GetInstance();
             if (t.Type != TokenType.Scan)
             {
-                throw MyC0Exception.InvalidTokenErr(t.BeginPos);
+                throw new MyC0Exception("应该为scan", t.BeginPos);
             }
             tokenProvider.Next();
             t = tokenProvider.PeekNextToken();
             if (t.Type != TokenType.BracketsLeftRound)
             {
-                throw MyC0Exception.InvalidTokenErr(t.BeginPos);
+                throw new MyC0Exception("缺少括号", t.BeginPos);
             }
             tokenProvider.Next();
             t = tokenProvider.PeekNextToken();
             if (t.Type != TokenType.Identifier)
             {
-                throw MyC0Exception.InvalidTokenErr(t.BeginPos);
+                throw new MyC0Exception("缺少变量名", t.BeginPos);
             }
             res.Identifier = t.Content;
             if (syt.IsConstVariable(par, res.Identifier))
@@ -48,7 +48,7 @@ namespace C0.Analyser.Statement
             t = tokenProvider.PeekNextToken();
             if (t.Type != TokenType.BracketsRightRound)
             {
-                throw MyC0Exception.InvalidTokenErr(t.BeginPos);
+                throw new MyC0Exception("括号不匹配", t.BeginPos);
             }
             tokenProvider.Next();
             t = tokenProvider.PeekNextToken();

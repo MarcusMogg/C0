@@ -20,7 +20,7 @@ namespace C0.Analyser
             Token t = tokenProvider.PeekNextToken();
             if (t.Type != TokenType.Identifier)
             {
-                throw MyC0Exception.InvalidTokenErr(t.BeginPos);
+                throw new MyC0Exception("变量名错误", t.BeginPos);
             }
 
             if (symbolTable.IsDeclaredCurDomain(par, t.Content) || symbolTable.IsFuncCurDomain(t.Content))

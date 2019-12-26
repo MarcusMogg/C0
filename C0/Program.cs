@@ -74,8 +74,11 @@ namespace C0
             }
             catch (MyC0Exception e)
             {
-                Console.WriteLine($"{e.ErrPos.X},{e.ErrPos.Y}");
-                Console.WriteLine(e);
+                if (e.ErrPos.X >= 0)
+                {
+                    Console.WriteLine($"第{e.ErrPos.X + 1}行,第{e.ErrPos.Y + 1}位");
+                }
+                Console.WriteLine(e.Message);
             }
             catch (Exception e)
             {

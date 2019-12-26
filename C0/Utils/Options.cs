@@ -13,7 +13,7 @@ namespace C0.Utils
         [Option('c', Required = false, HelpText = "将输入的 c0 源代码翻译为二进制目标文件")]
         public bool Binary { get; set; }
 
-        [Value(0, Default = "test.c0", Required = false, HelpText = "源文件")]
+        [Value(0, Required = true, HelpText = "源文件")]
         public string InputFile { get; set; }
 
         [Option('o', Default = @"out", Required = false, HelpText = "输出到指定的文件 file")]
